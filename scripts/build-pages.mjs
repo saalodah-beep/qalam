@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const SITE = "https://saalodah-beep.github.io/qalam/";
+const SITE = "https://sqalam.com/";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const { posts: raw = [] } = JSON.parse(fs.readFileSync(path.join(root, "posts.json"), "utf8"));
 
