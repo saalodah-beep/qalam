@@ -34,8 +34,13 @@ content:
             type: date
             options:
               format: yyyy-MM-dd
+          - name: period
+            label: وقت الكتابة (اختياري)
+            type: select
+            options:
+              values: [فجر, ضحى, ظهر, عصر, مغرب, عشاء, ليل]
           - name: hijri
-            label: التاريخ الهجري (اختياري — يُحسب تلقائيًا إن تُرك فارغًا)
+            label: نص التاريخ كاملًا (اختياري — يُكتب تلقائيًا مثل «عصر الجمعة ١٤٤٨/٦/١٠هـ»)
             type: string
           - name: excerpt
             label: المقتطف في الصفحة الرئيسية (اختياري)

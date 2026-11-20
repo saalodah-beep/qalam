@@ -235,14 +235,16 @@ const hijri = d => { try { return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-um
 const greg = d => { try { return new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-arab",{day:"numeric",month:"long",year:"numeric"}).format(d) + " م"; } catch(e){ return d.toDateString(); } };
 const ar = n => { try { return Number(n).toLocaleString("ar-SA-u-nu-arab"); } catch(e){ return String(n); } };
 const toAr = t => String(t).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
-const hijriOf = p => p.hijri ? esc(toAr(p.hijri)) : hijri(new Date(p.date || p.created || Date.now()));
+const pDate = p => { const v = p.date || p.created || Date.now(); return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? new Date(v + "T12:00:00") : new Date(v); };
+const hijriNum = d => { try { const f = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-arab",{day:"numeric",month:"numeric",year:"numeric"}).formatToParts(d); const g = t => (f.find(x => x.type === t) || {}).value || ""; return `${g("year")}/${g("month")}/${g("day")}هـ`; } catch(e){ return ""; } };
+const wday = d => { try { return new Intl.DateTimeFormat("ar-SA",{weekday:"long"}).format(d); } catch(e){ return ""; } };
+const hijriOf = p => { if (p.hijri) return esc(toAr(p.hijri)); const d = pDate(p); return esc([p.period, wday(d), hijriNum(d)].filter(Boolean).join(" ")); };
 const dateLine = p => {
-  const d = new Date(p.date || p.created || Date.now());
+  const d = pDate(p);
   const h = hijriOf(p);
   return `<span>${h}</span><span>${greg(d)}</span>`;
 };
 const words = t => (String(t||"").trim().match(/\S+/g) || []).length;
-const readTime = t => { const m = Math.max(1, Math.round(words(t)/180)); return m <= 2 ? (m === 1 ? "دقيقة قراءة" : "دقيقتا قراءة") : m <= 10 ? `${ar(m)} دقائق قراءة` : `${ar(m)} دقيقة قراءة`; };
 const excerpt = t => { const s = String(t||"").replace(/\s+/g," ").trim(); return s.length > 190 ? s.slice(0,190).replace(/\s\S*$/,"") + "…" : s; };
 const fmt = h => h
   .replace(/﴿[^﴾]*﴾/g, x => `<span class="ayah">${x}</span>`)
@@ -332,7 +334,7 @@ function renderPost(id){
   $("#main").innerHTML = `<article>
     <a class="back" href="#${esc(p.cat)}">→ ${catName(p.cat)}</a>
     <h1>${esc(p.title)}</h1>
-    <div class="meta"><span>${readTime(p.body)}</span>${p.published === false ? '<span class="badge">مسودة</span>' : ""}</div>
+    ${p.published === false ? '<div class="meta"><span class="badge">مسودة</span></div>' : ""}
     <div class="body">${paras(p.body)}</div>
     <div class="orn dark end" aria-hidden="true"><i></i><b></b><i></i></div>
     <div class="sig">${esc(p.sign || "كتبه/ صالح بن عوده")}<span class="sigdate">${dateLine(p)}</span>${p.note ? `<small>${esc(p.note)}</small>` : ""}</div>
