@@ -1,0 +1,61 @@
+content:
+  - name: blog
+    label: المنشورات
+    type: file
+    path: posts.json
+    format: json
+    fields:
+      - name: posts
+        label: المنشورات
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: title
+            label: العنوان
+            type: string
+            required: true
+          - name: cat
+            label: القسم
+            type: select
+            default: maqalat
+            options:
+              values:
+                - name: maqalat
+                  label: مقالات
+                - name: khawater
+                  label: خواطر
+                - name: taamulat
+                  label: تأملات
+          - name: date
+            label: تاريخ النشر
+            type: date
+            options:
+              format: yyyy-MM-dd
+          - name: hijri
+            label: التاريخ الهجري (اختياري — يُحسب تلقائيًا إن تُرك فارغًا)
+            type: string
+          - name: excerpt
+            label: المقتطف في الصفحة الرئيسية (اختياري)
+            type: text
+          - name: body
+            label: النص
+            description: "اترك سطرًا فارغًا بين الفقرات · الآية بين ﴿ ﴾ · الحديث بين (( )) · العريض بين ** ** · العبارة المميزة: ابدأ فقرتها بـ > · البيت: شطراه بينهما ..."
+            type: text
+            required: true
+          - name: sign
+            label: التوقيع
+            type: string
+            default: كتبه/ صالح بن عوده
+          - name: note
+            label: سطر صغير تحت التوقيع (اختياري)
+            type: string
+          - name: published
+            label: منشور (أطفئه ليبقى مسودة)
+            type: boolean
+            default: true
+          - name: id
+            label: معرّف الرابط بالإنجليزية (اختياري)
+            type: string

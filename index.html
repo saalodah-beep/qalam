@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#25352f">
+<title>قَلَم — مدونة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: هادئ، وقور، كتابيّ — مدونة شيخٍ يكتب المقالة والخاطرة والتأمل.
+   IDEA: دفترٌ مخطوط؛ الترويسة غلافٌ أخضر، والمقالة صفحةٌ بيضاء رحبة.
+   PICTURE: قلمُ قصبٍ يخطّ سطرًا من مداد على الغلاف الأخضر.
+   COLOUR and TYPE: أخضر #25352f غالب، أبيض للورق، مداد ذهبيّ #b8862b لمسةً واحدة؛ Amiri للعناوين وNoto Naskh للمتن.
+   LAYOUT: غلافٌ عريض، ثم شريط الأقسام والبحث، ثم قائمة المقالات في عمود قراءة واحد. */
+:root{color-scheme:light dark;
+--bg:light-dark(#f7f4ec,#141c19);--card:light-dark(#ffffff,#18221e);--ink:light-dark(#1d2622,#e7ece9);--soft:light-dark(#5c6b65,#9fb0a9);
+--green:#25352f;--green2:light-dark(#e9efec,#1d2a25);--gold:light-dark(#9a6f1f,#d6a74a);--line:light-dark(#e4ddcd,#2b3933);
+--fs:18px}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Naskh Arabic","Amiri",serif;overflow-x:clip}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:820px;margin:0 auto;padding:0 max(5vw,16px)}
+/* الغلاف */
+.cover{background:var(--green);color:#eef3ef;position:relative;overflow:hidden}
+.cover .in{position:relative;max-width:1100px;margin:0 auto;padding:6px max(5vw,16px) 18px}
+.star{position:absolute;width:230px;height:230px;inset-inline-end:-60px;top:-50px;opacity:.09;pointer-events:none}
+.topline{display:flex;align-items:center;gap:4px}
+.topline .sp{flex:1}
+.brand{font-family:Amiri,serif;font-weight:700;font-size:clamp(30px,5.6vw,38px);line-height:1.5;text-decoration:none;color:#fff;padding-inline-start:4px}
+.pen{width:clamp(50px,9.4vw,64px);height:auto;flex:none;display:block;margin-inline-start:-4px;margin-top:6px;overflow:visible}
+.burger,.fsz button{background:none;border:0;color:#eef3ef;min-height:44px;min-width:44px;border-radius:8px;cursor:pointer}
+.burger:hover,.fsz button:hover{background:#30443c}
+.burger{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.burger span{display:block;height:2px;width:22px;background:#eef3ef;border-radius:2px}
+.fsz{display:flex;gap:2px}
+.fsz button{font-family:Amiri,serif;font-size:15px;color:#b9c8c0}
+.orn{display:flex;align-items:center;gap:10px;margin:2px 0 12px}
+.orn i{flex:1;height:1px;background:linear-gradient(to left,transparent,#d6a74a 30%,#d6a74a 70%,transparent)}
+.orn b{width:7px;height:7px;transform:rotate(45deg);border:1px solid #d6a74a;flex:none}
+.orn.dark i{background:linear-gradient(to left,transparent,var(--gold) 30%,var(--gold) 70%,transparent)}
+.orn.dark b{border-color:var(--gold)}
+.tag{margin:0;font-size:15px;color:#c9d6cf;text-align:center}
+.tag .dot{color:#d6a74a;margin-inline:4px}
+.quote{margin:8px auto 0;width:fit-content;max-width:100%}
+.quote blockquote{margin:0;font-family:Amiri,serif;font-size:clamp(11px,3.4vw,16px);line-height:1.6;color:#e3ebe6;text-align:center;white-space:nowrap}
+.quote figcaption{font-size:12px;color:#d6a74a;text-align:end;margin-top:1px}
+#adminLink{display:none;color:var(--gold)}
+.readbar{position:fixed;top:0;inset-inline:0;z-index:25;height:52px;display:flex;align-items:center;gap:6px;padding:0 max(3vw,8px);background:var(--green);color:#eef3ef;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.readbar .rb-title{flex:1;font-family:Amiri,serif;font-weight:700;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rb-btn{background:none;border:0;color:#eef3ef;min-width:44px;min-height:44px;border-radius:8px;cursor:pointer;font-size:18px}
+.readbar .fsz button{color:#b9c8c0}
+@media(prefers-reduced-motion:no-preference){.readbar:not([hidden]){animation:drop .2s ease-out}@keyframes drop{from{transform:translateY(-100%)}to{transform:none}}}
+.progress{position:fixed;top:0;inset-inline:0;height:3px;z-index:30;background:transparent}
+.progress span{display:block;height:100%;width:0;background:var(--gold);margin-inline-start:0}
+/* الأقسام والبحث */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs a{text-decoration:none;padding:8px 16px;min-height:44px;display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--line);font-weight:500}
+.tabs a[aria-current]{background:var(--green);border-color:var(--green);color:#fff}
+.tabs .n{font-size:13px;opacity:.75}
+.search{flex:1 1 200px;display:flex}
+.search input{width:100%;min-height:44px;font-size:16px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--green2)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* القائمة */
+main{flex:1 0 auto;width:100%;padding-bottom:8px}
+body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.foot{width:100%}
+.foot{text-align:center;background:var(--green);color:#e3ebe6;padding:6px max(5vw,16px) calc(8px + env(safe-area-inset-bottom));margin-top:24px}
+.foot .orn{max-width:160px;margin:0 auto 0}
+.foot p{margin:0;font-family:Amiri,serif;font-size:14px;line-height:1.6}
+.more{margin-top:40px}
+.more h3{font-family:Amiri,serif;font-size:22px;margin:0 0 4px;color:var(--gold);font-weight:700}
+.more a{display:block;text-decoration:none;padding:12px 0;border-bottom:1px solid var(--line)}
+.more a:last-child{border-bottom:0}
+.more b{display:block;font-family:Amiri,serif;font-size:20px;line-height:1.4}
+.more small{color:var(--soft);font-size:13px}
+.list{list-style:none;margin:0;padding:22px 0 40px;display:grid;gap:16px}
+.item{position:relative;padding:18px 20px 20px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 1px 2px rgba(20,30,26,.05),0 6px 18px -10px rgba(20,30,26,.18);transition:border-color .2s,box-shadow .2s}
+.item:hover{border-color:var(--gold);box-shadow:0 1px 2px rgba(20,30,26,.06),0 10px 24px -12px rgba(20,30,26,.28)}
+.item a.t::after{content:"";position:absolute;inset:0;border-radius:14px}
+.item .kicker{position:relative;z-index:1}
+
+.item a.t{text-decoration:none}
+.item h2{font-family:Amiri,serif;font-weight:700;font-size:clamp(26px,4vw,32px);line-height:1.25;margin:6px 0 8px;text-wrap:balance}
+.item a.t:hover h2{color:var(--gold)}
+.meta{font-size:14px;color:var(--soft);display:flex;flex-wrap:wrap;gap:4px 14px}
+.cat{color:var(--gold);font-weight:600;text-decoration:none}
+.ex{margin:6px 0 0;color:var(--soft);font-size:17px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kicker{font-size:13px;font-weight:600;color:var(--gold);text-decoration:none}
+.when{font-size:14px;color:var(--soft);margin-top:2px}
+.empty{padding:56px 0;text-align:center;color:var(--soft)}
+.empty b{display:block;font-family:Amiri,serif;font-size:26px;color:var(--ink);margin-bottom:6px}
+/* المقالة */
+article{padding:28px 0 48px}
+.back{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--soft)}
+article h1{font-family:Amiri,serif;font-weight:700;font-size:clamp(34px,6vw,50px);line-height:1.15;margin:8px 0 12px;text-wrap:balance}
+.body{font-size:var(--fs);line-height:2;margin-top:28px}
+.body p{margin:0 0 1.1em}
+.basmala{text-align:center;font-family:Amiri,serif;font-size:1.25em;color:var(--gold)}
+.verse{display:flex;flex-wrap:wrap;justify-content:center;gap:0 2.2em;font-family:inherit;font-weight:700;color:var(--ink);font-size:1em;margin:1.4em 0!important;padding:.2em 0}
+.verse span{white-space:nowrap}
+@media(max-width:520px){.verse{flex-direction:column;align-items:stretch;gap:0}.verse span{white-space:normal}.verse span:first-child{text-align:start}.verse span:last-child{text-align:end}}
+.opening{font-weight:700}
+.ayah,.hadith,.verse{font-family:inherit;font-size:1em;font-weight:700}
+.saw{font-family:Amiri,serif;font-weight:400}
+.ayah{color:light-dark(#b3261e,#f28b82)}
+.hadith{color:light-dark(#1d5fa8,#8ab4f8)}
+.body strong{font-weight:700;color:var(--ink)}
+.hl{background:light-dark(#ece4d2,#222d28);border-inline-start:4px solid var(--gold);border-radius:6px;padding:.9em 1.1em;font-weight:700;margin:1.6em 0!important}
+.orn.end{max-width:240px;margin:36px auto 0}
+.sig{margin-top:18px;font-family:Amiri,serif;font-size:20px;font-weight:700;text-align:left}
+.sigdate{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 12px;font-family:"Noto Naskh Arabic",serif;font-size:14px;font-weight:400;color:var(--soft);margin-top:2px}
+.sig small{margin-top:10px;display:block;font-size:15px;color:var(--soft);font-weight:400}
+.share{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.share span{color:var(--soft);margin-inline-end:4px;font-size:14px}
+.ico{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--soft);cursor:pointer;padding:0}
+.ico:hover{color:var(--gold);border-color:var(--gold)}
+.ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.share .copied{color:var(--gold);font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--bg);text-decoration:none;cursor:pointer;font-size:15px}
+.btn.pri{background:var(--green);border-color:var(--green);color:#fff}
+.btn.dan{color:#b3261e;border-color:currentColor}
+/* لوحة الإدارة */
+.admin{padding:28px 0 56px}
+.admin h1{font-family:Amiri,serif;font-size:36px;margin:0 0 4px}
+.form{display:grid;gap:14px;margin:20px 0 36px;padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--green2)}
+.form label{display:grid;gap:6px;font-weight:600;font-size:15px}
+.form input,.form select,.form textarea{font-size:16px;font-weight:400;padding:10px 12px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.form textarea{min-height:320px;line-height:1.9;resize:vertical}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+.hint{font-size:13px;color:var(--soft);font-weight:400}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.msg{font-size:14px;color:var(--soft)}
+.alist{list-style:none;margin:0;padding:0}
+.alist li{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}
+.alist .tt{font-family:Amiri,serif;font-size:20px;font-weight:700}
+.badge{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--soft);margin-inline-start:6px;font-family:"Noto Naskh Arabic",serif;font-weight:400}
+.note{background:var(--green2);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--soft);margin-top:10px}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:no-preference){.ink{stroke-dasharray:300;stroke-dashoffset:300;animation:w 2.4s .3s ease-out forwards}@keyframes w{to{stroke-dashoffset:0}}}
+</style>
+</head>
+<body>
+<div class="readbar" id="readbar" hidden>
+  <button class="rb-btn" id="rbBack" aria-label="العودة إلى الرئيسية">→</button>
+  <span class="rb-title" id="rbTitle"></span>
+  <div class="fsz" role="group" aria-label="حجم الخط"><button class="rb-fs" data-fs="-2" title="تصغير الخط">أ−</button><button class="rb-fs" data-fs="2" title="تكبير الخط">أ+</button></div>
+</div>
+<div class="progress" id="progress" hidden><span id="progBar"></span></div>
+<header class="cover">
+  <svg class="star" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#d6a74a" stroke-width="1.4"><rect x="40" y="40" width="120" height="120"/><rect x="40" y="40" width="120" height="120" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="34"/><rect x="70" y="70" width="60" height="60"/><rect x="70" y="70" width="60" height="60" transform="rotate(45 100 100)"/></g></svg>
+  <div class="in">
+    <div class="topline">
+      <button id="menuBtn" class="burger" aria-label="القائمة" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+      <a class="brand" href="#all" data-nav="home">قَــلَــم</a>
+      <svg class="pen" viewBox="0 0 120 80" aria-hidden="true">
+        <defs><linearGradient id="reed" x1="0" x2="1"><stop offset="0" stop-color="#9c7434"/><stop offset=".45" stop-color="#e2bf7d"/><stop offset="1" stop-color="#c79b52"/></linearGradient></defs>
+        <path class="ink" d="M120 62 C104 60 96 64 86 62" fill="none" stroke="#d6a74a" stroke-width="3.2" stroke-linecap="round"/>
+        <g transform="rotate(-140 86 62)">
+          <path d="M86 62 L100 56 L100 68 Z" fill="#b48a45"/>
+          <path d="M86 62 L95 62" stroke="#25352f" stroke-width="1.2"/>
+          <rect x="100" y="56" width="66" height="12" rx="3" fill="url(#reed)"/>
+          <rect x="100" y="56" width="66" height="3" rx="1.5" fill="#f3dca8" opacity=".55"/>
+          <rect x="128" y="56" width="2" height="12" fill="#8a6428" opacity=".6"/>
+          <rect x="156" y="56" width="2" height="12" fill="#8a6428" opacity=".6"/>
+        </g>
+      </svg>
+      <span class="sp"></span>
+      <div class="fsz" role="group" aria-label="حجم الخط">
+        <button id="fsDown" title="تصغير الخط">أ−</button>
+        <button id="fsUp" title="تكبير الخط">أ+</button>
+      </div>
+    </div>
+    <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
+    <p class="tag">مقالات وخواطر وتأملات <span class="dot">·</span> بقلم صالح بن عوده</p>
+    <figure class="quote"><blockquote>«القلم نعمةٌ من الله عظيمة، لولا ذلك لم يقم ولم يصلح عيش»</blockquote><figcaption>قتادة رحمه الله</figcaption></figure>
+  </div>
+</header>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="menu" aria-label="القائمة" hidden>
+  <div class="dh"><b>قَلَم</b><button id="menuClose" class="x" aria-label="إغلاق">✕</button></div>
+  <a href="#all" class="dl">الرئيسية</a>
+  <div class="dt">الأقسام</div>
+  <div id="menuCats"></div>
+</aside>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <div class="tabs" id="tabs"></div>
+    <label class="search"><input id="q" type="search" placeholder="ابحث في المدونة…" aria-label="بحث"></label>
+  </div>
+</div>
+
+<main id="main" class="wrap"></main>
+<footer class="foot">
+  <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
+  <p>«اللهم انفع بما كُتب، واغفر لكاتبه وقارئه»</p>
+</footer>
+
+
+<script>
+{
+let STATIC_POSTS = [];
+const SITE_URL = "https://saalodah-beep.github.io/qalam/";
+
+const CATS = [
+  {id:"all", name:"الكل"},
+  {id:"maqalat", name:"مقالات"},
+  {id:"khawater", name:"خواطر"},
+  {id:"taamulat", name:"تأملات"}
+];
+const catName = id => (CATS.find(c => c.id === id) || {}).name || "";
+
+let dbPosts = [], dbRef = null, isOwner = false, editing = null, loadNote = "";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const hijri = d => { try { return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-arab",{day:"numeric",month:"long",year:"numeric"}).format(d).replace(/\s*هـ\s*$/,"") + " هـ"; } catch(e){ return ""; } };
+const greg = d => { try { return new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-arab",{day:"numeric",month:"long",year:"numeric"}).format(d) + " م"; } catch(e){ return d.toDateString(); } };
+const ar = n => { try { return Number(n).toLocaleString("ar-SA-u-nu-arab"); } catch(e){ return String(n); } };
+const toAr = t => String(t).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+const hijriOf = p => p.hijri ? esc(toAr(p.hijri)) : hijri(new Date(p.date || p.created || Date.now()));
+const dateLine = p => {
+  const d = new Date(p.date || p.created || Date.now());
+  const h = hijriOf(p);
+  return `<span>${h}</span><span>${greg(d)}</span>`;
+};
+const words = t => (String(t||"").trim().match(/\S+/g) || []).length;
+const readTime = t => { const m = Math.max(1, Math.round(words(t)/180)); return m <= 2 ? (m === 1 ? "دقيقة قراءة" : "دقيقتا قراءة") : m <= 10 ? `${ar(m)} دقائق قراءة` : `${ar(m)} دقيقة قراءة`; };
+const excerpt = t => { const s = String(t||"").replace(/\s+/g," ").trim(); return s.length > 190 ? s.slice(0,190).replace(/\s\S*$/,"") + "…" : s; };
+const fmt = h => h
+  .replace(/﴿[^﴾]*﴾/g, x => `<span class="ayah">${x}</span>`)
+  .replace(/\(\([\s\S]*?\)\)/g, x => `<span class="hadith">${x}</span>`)
+  .replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>")
+  .replace(/ﷺ/g, '<span class="saw">ﷺ</span>');
+const paras = t => String(t||"").trim().split(/\n\s*\n/).map(p => {
+  p = p.trim();
+  if (/^بسم الله الرحمن الرحيم$/.test(p)) return `<p class="basmala">${esc(p)}</p>`;
+  if (/^الحمد لله/.test(p) && /أما بعد[:：]?$/.test(p)) return `<p class="opening">${fmt(esc(p))}</p>`;
+  if (/^[>›]\s*/.test(p)) return `<p class="hl">${fmt(esc(p.replace(/^[>›]\s*/,""))).replace(/\n/g,"<br>")}</p>`;
+  const ls = p.split("\n").map(x => x.trim());
+  let verse = null;
+  if (ls.length === 1 && / \.\.\. /.test(p) && p.length < 90) verse = p.split(" ... ");
+  else if (ls.length === 2 && ls.every(x => x.length < 45)) verse = ls;
+  if (verse) return `<p class="verse"><span>${fmt(esc(verse[0]))}</span><span>${fmt(esc(verse[1]))}</span></p>`;
+  return `<p>${fmt(esc(p)).replace(/\n/g,"<br>")}</p>`;
+}).join("");
+const norm = s => String(s||"").replace(/[ً-ْـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").toLowerCase();
+
+function allPosts(){
+  const s = STATIC_POSTS.map(p => ({...p, src:"static"}));
+  const d = dbPosts.filter(p => p.published !== false || isOwner).map(p => ({...p, src:"db"}));
+  return [...s, ...d].sort((a,b) => new Date(b.date||b.created||0) - new Date(a.date||a.created||0));
+}
+const visible = () => allPosts().filter(p => p.published !== false);
+
+/* حجم الخط */
+let fs = 18;
+try { fs = +localStorage.getItem("qalam-fs") || 18; } catch(e){}
+const applyFs = () => { document.documentElement.style.setProperty("--fs", fs + "px"); try { localStorage.setItem("qalam-fs", fs); } catch(e){} };
+applyFs();
+$("#fsUp").onclick = () => { fs = Math.min(fs + 2, 28); applyFs(); };
+document.querySelectorAll(".rb-fs").forEach(b => b.onclick = () => { fs = Math.min(28, Math.max(14, fs + +b.dataset.fs)); applyFs(); });
+$("#fsDown").onclick = () => { fs = Math.max(fs - 2, 14); applyFs(); };
+
+/* التوجيه */
+function route(){
+  const h = location.hash.slice(1) || "all";
+  document.querySelectorAll(".drawer [data-nav]").forEach(a => a.removeAttribute("aria-current"));
+  const listView = CATS.some(c => c.id === h);
+  if (listView){ renderList(h); }
+  else if (h.startsWith("p-")) renderPost(h.slice(2));
+  else if (h === "admin"){ renderList("all"); }
+  else renderList("all");
+}
+
+function renderTabs(cur){
+  const v = visible();
+  $("#menuCats").innerHTML = CATS.map(c => {
+    const n = c.id === "all" ? v.length : v.filter(p => p.cat === c.id).length;
+    return `<a class="dl" href="#${c.id}" ${c.id === cur ? 'aria-current="page"' : ""}>${c.name}<span class="n">${ar(n)}</span></a>`;
+  }).join("");
+  $("#tabs").innerHTML = CATS.map(c => {
+    const n = c.id === "all" ? v.length : v.filter(p => p.cat === c.id).length;
+    return `<a href="#${c.id}" ${c.id === cur ? 'aria-current="page"' : ""}>${c.name}<span class="n">${ar(n)}</span></a>`;
+  }).join("");
+}
+
+function renderList(cat){
+  renderTabs(cat);
+  const q = norm($("#q").value.trim());
+  let items = visible().filter(p => cat === "all" || p.cat === cat);
+  if (q) items = items.filter(p => norm(p.title + " " + p.body).includes(q));
+  const head = loadNote ? `<p class="note">${esc(loadNote)}</p>` : "";
+  if (!items.length){
+    $("#main").innerHTML = head + `<div class="empty"><b>${q ? "لا نتائج" : "لا شيء هنا بعد"}</b>${q ? "جرّب كلمة أخرى." : cat === "all" ? "ستظهر المقالات والخواطر والتأملات هنا فور نشرها." : `لم يُنشر في «${catName(cat)}» شيء بعد.`}</div>`;
+    return;
+  }
+  $("#main").innerHTML = head + `<ul class="list">` + items.map((p,i) => `
+    <li class="item">
+      <a class="kicker" href="#${esc(p.cat)}">${catName(p.cat)}</a>
+      <a class="t" href="#p-${esc(p.id)}"><h2>${esc(p.title)}</h2></a>
+      <div class="when">${hijriOf(p)}</div>
+      <p class="ex">${esc(p.excerpt || excerpt(p.body))}</p>
+    </li>`).join("") + `</ul>`;
+}
+$("#q").addEventListener("input", () => { const h = location.hash.slice(1) || "all"; renderList(CATS.some(c => c.id === h) ? h : "all"); });
+
+function renderPost(id){
+  const p = allPosts().find(x => String(x.id) === id);
+  if (!p){ $("#main").innerHTML = `<div class="empty"><b>${dbRef || !loadNote ? "لم نجد هذه الصفحة" : "جارٍ التحميل…"}</b><a class="btn" href="#all">العودة إلى الرئيسية</a></div>`; return; }
+  const link = (SITE_URL || location.href.split("#")[0]) + "#p-" + p.id;
+  const txt = p.title + " — قلم\n" + link;
+  const others = visible().filter(x => String(x.id) !== String(p.id));
+  const more = [...others.filter(x => x.cat === p.cat), ...others.filter(x => x.cat !== p.cat)].slice(0, 2);
+  $("#main").innerHTML = `<article>
+    <a class="back" href="#${esc(p.cat)}">→ ${catName(p.cat)}</a>
+    <h1>${esc(p.title)}</h1>
+    <div class="meta"><span>${readTime(p.body)}</span>${p.published === false ? '<span class="badge">مسودة</span>' : ""}</div>
+    <div class="body">${paras(p.body)}</div>
+    <div class="orn dark end" aria-hidden="true"><i></i><b></b><i></i></div>
+    <div class="sig">${esc(p.sign || "كتبه/ صالح بن عوده")}<span class="sigdate">${dateLine(p)}</span>${p.note ? `<small>${esc(p.note)}</small>` : ""}</div>
+    <div class="share"><span>شارك</span>
+      <a class="ico" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener" title="واتساب" aria-label="مشاركة عبر واتساب"><svg viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 18.8z"/><path d="M9 9.5c.3 2 2.3 4.2 4.6 4.8l1.1-1.1 1.6.8"/></svg></a>
+      <a class="ico" href="https://x.com/intent/post?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener" title="إكس" aria-label="مشاركة عبر إكس"><svg viewBox="0 0 24 24"><path d="M5 4l14 16M19 4L5 20"/></svg></a>
+      <button class="ico" id="copyLink" title="نسخ الرابط" aria-label="نسخ الرابط"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
+      <span class="copied" id="copied" hidden>نُسخ ✓</span>
+      ${isOwner && p.src === "db" ? `<a class="btn" href="#admin" data-edit="${esc(p.id)}">تعديل</a>` : ""}
+    </div>
+    ${more.length ? `<section class="more"><h3>اقرأ أيضاً</h3>${more.map(m => `<a href="#p-${esc(m.id)}"><b>${esc(m.title)}</b><small>${hijriOf(m)}</small></a>`).join("")}</section>` : ""}
+  </article>`;
+  window.scrollTo(0,0);
+  $("#copyLink").onclick = async () => { const c = $("#copied"); try { await navigator.clipboard.writeText(link); c.textContent = "نُسخ ✓"; } catch(err){ c.textContent = link; } c.hidden = false; setTimeout(() => { c.hidden = true; }, 2500); };
+  const ed = document.querySelector("[data-edit]"); if (ed) ed.onclick = () => { editing = p.id; };
+}
+
+
+function renderAdmin(){
+  if (!isOwner){ $("#main").innerHTML = `<div class="empty"><b>هذه الصفحة لصاحب المدونة</b><a class="btn" href="#all">العودة إلى الرئيسية</a></div>`; return; }
+  const p = editing ? dbPosts.find(x => x.id === editing) : null;
+  const today = new Date().toISOString().slice(0,10);
+  const mine = [...dbPosts].sort((a,b) => new Date(b.date||b.created||0) - new Date(a.date||a.created||0));
+  $("#main").innerHTML = `<section class="admin">
+    <h1>${p ? "تعديل" : "نشر جديد"}</h1>
+    <p class="msg">ما تنشره هنا يظهر في المدونة فورًا.</p>
+    <form class="form" id="f">
+      <label>العنوان<input id="fTitle" required maxlength="200" value="${esc(p?.title)}"></label>
+      <div class="row">
+        <label>القسم<select id="fCat">${CATS.slice(1).map(c => `<option value="${c.id}" ${p?.cat === c.id ? "selected" : ""}>${c.name}</option>`).join("")}</select></label>
+        <label>تاريخ النشر<input id="fDate" type="date" value="${esc((p?.date || today).slice(0,10))}"></label>
+        <label>التاريخ الهجري <span class="hint">(اختياري — يُحسب تلقائيًا)</span><input id="fHijri" placeholder="مثل: عصر الجمعة ٢٦/٥/١٤٤٨هـ" value="${esc(p?.hijri)}"></label>
+      </div>
+      <label>النص <span class="hint">اترك سطرًا فارغًا بين الفقرات · الآية بين ﴿ ﴾ · الحديث بين (( )) · العريض بين ** ** · العبارة المميزة: ابدأ فقرتها بـ &gt; · البيت: شطراه بينهما ...</span><textarea id="fBody" required>${esc(p?.body)}</textarea></label>
+      <label>التوقيع<input id="fSign" value="${esc(p?.sign || "كتبه/ صالح بن عوده")}"></label>
+      <div class="acts">
+        <button class="btn pri" type="submit" data-pub="1">${p ? "حفظ ونشر" : "نشر"}</button>
+        <button class="btn" type="submit" data-pub="0">حفظ كمسودة</button>
+        ${p ? `<button class="btn" type="button" id="cancel">إلغاء التعديل</button>` : ""}
+        <span class="msg" id="fMsg"></span>
+      </div>
+    </form>
+    <h2 style="font-family:Amiri,serif;font-size:26px;margin:0 0 6px">ما نشرتَه من اللوحة</h2>
+    ${mine.length ? `<ul class="alist">${mine.map(x => `<li>
+        <div><span class="tt">${esc(x.title)}</span><span class="badge">${catName(x.cat)}</span>${x.published === false ? '<span class="badge">مسودة</span>' : ""}</div>
+        <div class="acts"><a class="btn" href="#p-${esc(x.id)}">عرض</a><button class="btn" data-e="${esc(x.id)}">تعديل</button><button class="btn dan" data-d="${esc(x.id)}">حذف</button></div>
+      </li>`).join("")}</ul>` : `<p class="msg">لا شيء بعد.</p>`}
+    ${STATIC_POSTS.length ? `<p class="note">وفي المدونة ${STATIC_POSTS.length} من المنشورات أضافها Claude؛ لتعديلها اطلب ذلك منه.</p>` : ""}
+  </section>`;
+  let pub = true;
+  document.querySelectorAll("[data-pub]").forEach(b => b.onclick = () => { pub = b.dataset.pub === "1"; });
+  $("#f").onsubmit = async e => {
+    e.preventDefault();
+    const m = $("#fMsg"); m.textContent = "جارٍ الحفظ…";
+    const data = { title:$("#fTitle").value.trim(), cat:$("#fCat").value, date:$("#fDate").value || today,
+      hijri:$("#fHijri").value.trim(), body:$("#fBody").value.replace(/\r/g,""), sign:$("#fSign").value.trim(),
+      published:pub, updated:Date.now() };
+    try {
+      if (p){ await dbRef.doc(p.id).set({...data, created:p.created || Date.now()}); }
+      else { await dbRef.add({...data, created:Date.now()}); }
+      editing = null; m.textContent = "تم ✓";
+      setTimeout(renderAdmin, 400);
+    } catch(err){ m.textContent = err && err.code === "quota_exceeded" ? "امتلأت المساحة؛ احذف بعض المسودات." : "تعذّر الحفظ، حاول مرة أخرى."; }
+  };
+  const c = $("#cancel"); if (c) c.onclick = () => { editing = null; renderAdmin(); };
+  document.querySelectorAll("[data-e]").forEach(b => b.onclick = () => { editing = b.dataset.e; renderAdmin(); window.scrollTo(0,0); });
+  document.querySelectorAll("[data-d]").forEach(b => b.onclick = async () => {
+    if (b.dataset.sure !== "1"){ b.dataset.sure = "1"; b.textContent = "تأكيد الحذف؟"; setTimeout(() => { if (b.isConnected){ b.dataset.sure = ""; b.textContent = "حذف"; } }, 4000); return; }
+    b.textContent = "…";
+    try { await dbRef.doc(b.dataset.d).delete(); } catch(err){ b.textContent = "تعذّر"; }
+  });
+}
+
+const openMenu = o => { $("#menu").hidden = !o; $("#scrim").hidden = !o; $("#menuBtn").setAttribute("aria-expanded", o); if (o){ renderTabs(location.hash.slice(1) || "all"); $("#menuClose").focus(); } };
+$("#menuBtn").onclick = () => openMenu(true);
+$("#menuClose").onclick = $("#scrim").onclick = () => openMenu(false);
+$("#menu").addEventListener("click", e => { if (e.target.closest("a")) openMenu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") openMenu(false); });
+const prog = () => {
+  const on = location.hash.startsWith("#p-");
+  const past = on && document.querySelector(".cover").getBoundingClientRect().bottom < 0;
+  $("#readbar").hidden = !past;
+  $("#progress").hidden = !on;
+  if (!on) return;
+  const h1 = document.querySelector("article h1"); if (h1) $("#rbTitle").textContent = h1.textContent;
+  const art = document.querySelector("article"); if (!art) return;
+  const r = art.getBoundingClientRect(), total = r.height - innerHeight;
+  const pct = total > 0 ? Math.min(100, Math.max(0, -r.top / total * 100)) : 100;
+  $("#progBar").style.width = pct + "%";
+};
+addEventListener("scroll", prog, {passive:true});
+$("#rbBack").onclick = () => { location.hash = "all"; };
+window.addEventListener("hashchange", () => setTimeout(prog, 50));
+window.addEventListener("hashchange", route);
+route();
+
+/* تحميل المنشورات */
+loadNote = "جارٍ التحميل…";
+fetch("posts.json?v=" + Date.now(), {cache:"no-store"})
+  .then(r => r.json())
+  .then(d => { STATIC_POSTS = (d.posts || []).map((p,i) => ({...p, id: p.id || ("p" + (i+1))})); loadNote = ""; route(); })
+  .catch(() => { loadNote = "تعذّر تحميل المنشورات، حدّث الصفحة."; route(); });
+}
+</script>
+</body>
+</html>
