@@ -40,7 +40,13 @@ for (const p of posts) {
 <meta property="og:url" content="${esc(url)}">
 <meta property="og:locale" content="ar_AR">
 <meta property="article:section" content="${esc(CATS[p.cat] || "")}">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE}assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE}assets/og.jpg">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
 <meta name="twitter:title" content="${esc(p.title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="theme-color" content="#25352f">
