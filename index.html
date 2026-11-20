@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#25352f">
+<meta name="description" content="مقالات وخواطر وتأملات بقلم صالح بن عوده">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="قَلَم">
+<meta property="og:title" content="قَلَم — مدونة صالح بن عوده">
+<meta property="og:description" content="مقالات وخواطر وتأملات بقلم صالح بن عوده">
+<meta property="og:url" content="https://saalodah-beep.github.io/qalam/">
+<meta property="og:locale" content="ar_AR">
 <title>قَلَم — مدونة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
@@ -328,7 +335,7 @@ $("#q").addEventListener("input", () => { const h = location.hash.slice(1) || "a
 function renderPost(id){
   const p = allPosts().find(x => String(x.id) === id);
   if (!p){ $("#main").innerHTML = `<div class="empty"><b>${dbRef || !loadNote ? "لم نجد هذه الصفحة" : "جارٍ التحميل…"}</b><a class="btn" href="#all">العودة إلى الرئيسية</a></div>`; return; }
-  const link = (SITE_URL || location.href.split("#")[0]) + "#p-" + p.id;
+  const link = /^[A-Za-z0-9_-]+$/.test(String(p.id)) ? SITE_URL + "p/" + p.id + "/" : SITE_URL + "#p-" + p.id;
   const txt = p.title + " — قلم\n" + link;
   const others = visible().filter(x => String(x.id) !== String(p.id));
   const more = [...others.filter(x => x.cat === p.cat), ...others.filter(x => x.cat !== p.cat)].slice(0, 2);

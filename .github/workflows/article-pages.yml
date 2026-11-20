@@ -1,0 +1,36 @@
+name: صفحات المقالات للمعاينة
+
+on:
+  push:
+    branches: [main]
+    paths: [posts.json, scripts/build-pages.mjs]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: article-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/build-pages.mjs
+      - name: حفظ الصفحات
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A p
+          if git diff --cached --quiet; then echo "لا تغيير"; exit 0; fi
+          git commit -m "تحديث صفحات المقالات"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
+        env:
+          GH_TOKEN: ${{ github.token }}
