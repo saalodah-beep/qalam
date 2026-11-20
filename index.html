@@ -439,12 +439,12 @@ window.addEventListener("hashchange", () => setTimeout(prog, 50));
 window.addEventListener("hashchange", route);
 route();
 
-const autoId = p => { let h = 0; for (const c of String(p.title || "")) h = (h * 31 + c.codePointAt(0)) >>> 0; return String(p.date || "").replace(/-/g,"") + "-" + h.toString(36); };
+const assignIds = list => { const used = new Set(list.map(p => p.id && String(p.id).trim()).filter(Boolean)); const sorted = [...list].sort((a,b) => String(a.date||"").localeCompare(String(b.date||"")) || String(a.title||"").localeCompare(String(b.title||""))); for (const p of sorted) { if (p.id && String(p.id).trim()) continue; const base = String(p.date || "").replace(/-/g,"").slice(2) || "p"; let id = base, n = 2; while (used.has(id)) id = base + "-" + n++; used.add(id); p._id = id; } return list.map(p => ({...p, id: (p.id && String(p.id).trim()) || p._id})); };
 /* تحميل المنشورات */
 loadNote = "جارٍ التحميل…";
 fetch("posts.json?v=" + Date.now(), {cache:"no-store"})
   .then(r => r.json())
-  .then(d => { STATIC_POSTS = (d.posts || []).map(p => ({...p, id: (p.id && String(p.id).trim()) || autoId(p)})); loadNote = ""; route(); })
+  .then(d => { STATIC_POSTS = assignIds((d.posts || []).map(p => ({...p}))); loadNote = ""; route(); })
   .catch(() => { loadNote = "تعذّر تحميل المنشورات، حدّث الصفحة."; route(); });
 }
 </script>

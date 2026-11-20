@@ -5,12 +5,14 @@ import path from "node:path";
 
 const SITE = "https://saalodah-beep.github.io/qalam/";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const { posts = [] } = JSON.parse(fs.readFileSync(path.join(root, "posts.json"), "utf8"));
+const { posts: raw = [] } = JSON.parse(fs.readFileSync(path.join(root, "posts.json"), "utf8"));
 
-const autoId = p => { let h = 0; for (const c of String(p.title || "")) h = (h * 31 + c.codePointAt(0)) >>> 0; return String(p.date || "").replace(/-/g, "") + "-" + h.toString(36); };
+// يطابق assignIds في index.html: المعرّف الآلي = تاريخ النشر مختصرًا (YYMMDD)، و-2، -3 لما يتكرر في اليوم نفسه
+const assignIds = list => { const used = new Set(list.map(p => p.id && String(p.id).trim()).filter(Boolean)); const sorted = [...list].sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")) || String(a.title || "").localeCompare(String(b.title || ""))); for (const p of sorted) { if (p.id && String(p.id).trim()) continue; const base = String(p.date || "").replace(/-/g, "").slice(2) || "p"; let id = base, n = 2; while (used.has(id)) id = base + "-" + n++; used.add(id); p._id = id; } return list.map(p => ({ ...p, id: (p.id && String(p.id).trim()) || p._id })); };
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const clean = s => String(s || "").replace(/\*\*|\(\(|\)\)|^>\s*/gm, "").replace(/\s+/g, " ").trim();
 const excerpt = p => { const t = clean(p.excerpt || String(p.body || "").replace(/^بسم الله الرحمن الرحيم\s*/, "")); return t.length > 180 ? t.slice(0, 180).replace(/\s\S*$/, "") + "…" : t; };
+const posts = assignIds(raw.map(p => ({ ...p })));
 const CATS = { maqalat: "مقالات", khawater: "خواطر", taamulat: "تأملات" };
 
 const outDir = path.join(root, "p");
@@ -18,7 +20,7 @@ fs.rmSync(outDir, { recursive: true, force: true });
 let n = 0;
 for (const p of posts) {
   if (p.published === false) continue;
-  const id = (p.id && String(p.id).trim()) || autoId(p);
+  const id = p.id;
   if (!/^[A-Za-z0-9_-]+$/.test(id)) continue;
   const url = `${SITE}p/${id}/`;
   const target = `../../#p-${id}`;
