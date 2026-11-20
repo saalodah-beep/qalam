@@ -418,11 +418,12 @@ window.addEventListener("hashchange", () => setTimeout(prog, 50));
 window.addEventListener("hashchange", route);
 route();
 
+const autoId = p => { let h = 0; for (const c of String(p.title || "")) h = (h * 31 + c.codePointAt(0)) >>> 0; return String(p.date || "").replace(/-/g,"") + "-" + h.toString(36); };
 /* تحميل المنشورات */
 loadNote = "جارٍ التحميل…";
 fetch("posts.json?v=" + Date.now(), {cache:"no-store"})
   .then(r => r.json())
-  .then(d => { STATIC_POSTS = (d.posts || []).map((p,i) => ({...p, id: p.id || ("p" + (i+1))})); loadNote = ""; route(); })
+  .then(d => { STATIC_POSTS = (d.posts || []).map(p => ({...p, id: (p.id && String(p.id).trim()) || autoId(p)})); loadNote = ""; route(); })
   .catch(() => { loadNote = "تعذّر تحميل المنشورات، حدّث الصفحة."; route(); });
 }
 </script>
